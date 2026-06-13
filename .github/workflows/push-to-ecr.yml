@@ -1,0 +1,89 @@
+name: Build & Push to Amazon ECR on Release Tag
+
+on:
+  push:
+    tags:
+    - '0.*'
+
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Test version'
+        required: true
+        default: '0.0.1-test'
+      service:
+        description: 'Which service to build & push (all)'
+        required: false
+        default: 'all'
+
+permissions:
+  contents: write
+  id-token: write
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  IMAGE_TAG:  ${{ github.ref_name }}
+
+jobs:
+  prepare-release:
+    name: Create Release Branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Create release branch
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git checkout -b release/${{ env.IMAGE_TAG }}
+          git push origin release/${{ env.IMAGE_TAG }}
+
+  build-and-push-images:
+    name: Build & Push Docker Images
+    needs: prepare-release
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service:
+          - ui
+          - catalog
+          - cart
+          - orders
+          - checkout
+          - assets
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          ref: release/${{ env.IMAGE_TAG }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: GithubActionsPush
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push ${{ matrix.service }}
+        env:
+          SERVICE: ${{ matrix.service }}
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.ref_name }}
+          GIT_SHA: ${{ github.sha }}
+        run: |
+          SHORT_SHA=${GIT_SHA:0:7}
+          scripts/build-image.sh -s $SERVICE -t $SHORT_SHA -p $REGISTRY/retail-store-sample/$SERVICE
+          docker buildx imagetools create \
+            $REGISTRY/retail-store-sample/$SERVICE:$SHORT_SHA \
+            --tag $REGISTRY/retail-store-sample/$SERVICE:$IMAGE_TAG 
+
