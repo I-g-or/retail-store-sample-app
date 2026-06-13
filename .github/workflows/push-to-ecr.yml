@@ -65,7 +65,6 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
-          role-session-name: GithubActionsPush
 
       - name: Login to Amazon ECR
         id: login-ecr
