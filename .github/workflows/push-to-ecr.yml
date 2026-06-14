@@ -81,8 +81,11 @@ jobs:
           GIT_SHA: ${{ github.sha }}
         run: |
           SHORT_SHA=${GIT_SHA:0:7}
-          scripts/build-image.sh -s $SERVICE -t $SHORT_SHA -p $REGISTRY/retail-store-sample/$SERVICE
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} | \
+            docker login --username AWS --password-stdin $REGISTRY
+          scripts/build-image.sh -s $SERVICE -t $SHORT_SHA -p $REGISTRY/retail-store-sample/$SERVICE --multi-arch 
           docker buildx imagetools create \
             $REGISTRY/retail-store-sample/$SERVICE:$SHORT_SHA \
             --tag $REGISTRY/retail-store-sample/$SERVICE:$IMAGE_TAG 
+
 
