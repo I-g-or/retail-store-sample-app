@@ -85,7 +85,7 @@ jobs:
             docker login --username AWS --password-stdin $REGISTRY
           scripts/build-image.sh -s $SERVICE -t $SHORT_SHA -r $REGISTRY --multi-arch -p
           docker buildx imagetools create \
-            $REGISTRY/retail-store-sample/$SERVICE:$SHORT_SHA \
+            $REGISTRY/retail-store-sample-$SERVICE:$SHORT_SHA \
             --tag $REGISTRY/retail-store-sample-$SERVICE:$IMAGE_TAG 
 
 
