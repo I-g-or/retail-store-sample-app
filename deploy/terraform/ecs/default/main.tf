@@ -29,11 +29,14 @@ module "dependencies" {
 
 locals {
   container_image_overrides = {
+    default_repository = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com"
+    default_tag        = var.image_tag
+
     ui       = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/retail-store-ui:${var.image_tag}"
     catalog  = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/retail-store-catalog:${var.image_tag}"
-    carts    = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/retail-store-cart:${var.image_tag}"
-    orders   = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/retail-store-orders:${var.image_tag}"
+    cart     = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/retail-store-cart:${var.image_tag}"
     checkout = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/retail-store-checkout:${var.image_tag}"
+    orders   = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/retail-store-orders:${var.image_tag}"
     assets   = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/retail-store-assets:${var.image_tag}"
   }
 }

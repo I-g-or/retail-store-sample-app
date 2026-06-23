@@ -18,6 +18,6 @@ variable "aws_region" {
 }
 
 variable "image_tag" {
-  type = string
-  default     = "0.1.1"
+  type    = string
+  default = "0.1.1"
 }

@@ -20,7 +20,6 @@ variable "asg_desired_capacity" {
 }
 
 
-
 variable "environment_name" {
   type = string
 }
@@ -50,11 +49,11 @@ variable "public_subnet_ids" {
   type        = list(string)
 }
 
-# variable "container_image_overrides" {
-#   type        = any
-#   default     = {}
-#   description = "Container image override object"
-# }
+variable "container_image_overrides" {
+  type        = map(string)
+  default     = {}
+  description = "Container image override object"
+}
 
 variable "catalog_db_endpoint" {
   type = string
