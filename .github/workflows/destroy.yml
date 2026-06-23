@@ -1,0 +1,32 @@
+name: Destroy ECS EC2
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  terraform-destroy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Download Plan Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: tf-plan
+          path: deploy/terraform/ecs/default
+
+      - name: Terraform destroy
+        working-directory: deploy/terraform/ecs/default
+        run: terraform destroy -auto-approve plan.tfplan
