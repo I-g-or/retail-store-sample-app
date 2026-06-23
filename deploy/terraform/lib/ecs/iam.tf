@@ -33,8 +33,8 @@ resource "aws_iam_role_policy_attachment" "ec2-role_policy_cw" {
 }
 
 # EC2 instance Profile
-resource "aws_iam_instance_profile" "ec2-role-profile" {
-  name = "ec2-role-profile"
+resource "aws_iam_instance_profile" "ec2-profile" {
+  name = "ec2-profile"
   role = aws_iam_role.ec2-role.name
 }
 

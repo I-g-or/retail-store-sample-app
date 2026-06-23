@@ -4,7 +4,7 @@ module "ec2_sg" {
 
   name        = "${var.environment_name}-ec2-sg"
   description = "Security group for ECS EC2 instances in ASG behind ALB"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
 
   computed_ingress_with_source_security_group_id = [
     {

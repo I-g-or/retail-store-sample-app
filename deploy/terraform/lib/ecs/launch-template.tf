@@ -9,7 +9,7 @@ resource "aws_launch_template" "ecs_ec2" {
   instance_type = var.ec2_instance_type     # "t3.micro"
 
   iam_instance_profile {
-    name = aws_iam_instance_profile.ecs_ec2.name
+    name = aws_iam_instance_profile.ec2-profile.name
   }
 
   user_data = base64encode(<<EOF
@@ -23,7 +23,7 @@ EOF
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups             = [aws_security_group.ecs_nodes.id]
+    security_groups             = [module.ec2_sg.security_group_id]
     subnet_id                   = null
   }
 
