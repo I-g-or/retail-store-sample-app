@@ -3,11 +3,11 @@ variable "environment_name" {
   default = "retail-store-ecs"
 }
 
-variable "container_image_overrides" {
-  type        = any
-  default     = {}
-  description = "Container image override object"
-}
+# variable "container_image_overrides" {
+#   type        = any
+#   default     = {}
+#   description = "Container image override object"
+# }
 
 variable "aws_account_id" {
   type = string
