@@ -8,3 +8,16 @@ variable "container_image_overrides" {
   default     = {}
   description = "Container image override object"
 }
+
+variable "aws_account_id" { 
+  type = string
+}  
+
+variable "aws_region" { 
+  type = string
+}  
+
+variable "tags" {
+  description = "List of tags to be associated with resources."
+  default     = {}
+}

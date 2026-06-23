@@ -1,0 +1,114 @@
+name: Deploy to ECS EC2
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  fmt-validate:
+    name: Terraform fmt validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform fmt validate
+        working-directory: deploy/terraform/ecs/default
+        run: |
+          terraform init -input=false \
+            -var="environment_name=dev" \
+            -var="aws_account_id=${{ secrets.AWS_ACCOUNT_ID }}" \
+            -var="aws_region=${{ secrets.AWS_REGION }}"
+          terraform fmt -check -recursive
+          terraform validate 
+
+  tflint:
+    name: Terraform TFLint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Install TFLint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+            tflint_version: latest
+
+      - name: Initialize TFLint
+        run: tflint --init
+
+      - name: Run TFLint
+        working-directory: deploy/terraform/ecs/default
+        run: tflint -f compact --recursive
+
+  tf-plan:
+    needs: 
+      - tflint
+      - fmt-validate
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform plan
+        working-directory: deploy/terraform/ecs/default
+        run: |
+          terraform init
+          terraform plan \
+            -var="environment_name=dev" \
+            -var="aws_account_id=${{ secrets.AWS_ACCOUNT_ID }}" \
+            -var="aws_region=${{ secrets.AWS_REGION }}" \
+            -out=plan.tfplan
+
+      - name: Upload Plan Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tf-plan
+          path: deploy/terraform/ecs/default/plan.tfplan
+          retention-days: 1
+
+
+  deploy:
+    needs: 
+      - tf-plan
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Download Plan Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: tf-plan
+          path: deploy/terraform/ecs/default
+
+      - name: Terraform Apply
+        working-directory: deploy/terraform/ecs/default
+        run: terraform apply plan.tfplan

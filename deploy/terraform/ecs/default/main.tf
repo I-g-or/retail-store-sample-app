@@ -27,6 +27,17 @@ module "dependencies" {
   checkout_security_group_id = module.retail_app_ecs.checkout_security_group_id
 }
 
+locals {
+  container_image_overrides = {
+    ui       = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/retail-store-ui:${var.tags}"
+    catalog  = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/retail-store-catalog:${var.tags}"
+    carts    = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/retail-store-cart:${var.tags}"
+    orders   = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/retail-store-orders:${var.tags}"
+    checkout = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/retail-store-checkout:${var.tags}"
+    assets   = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/retail-store-assets:${var.tags}"
+  }
+}
+
 module "retail_app_ecs" {
   source = "../../lib/ecs"
 
@@ -36,7 +47,7 @@ module "retail_app_ecs" {
   subnet_ids                = module.vpc.inner.private_subnets
   public_subnet_ids         = module.vpc.inner.public_subnets
   tags                      = module.tags.result
-  container_image_overrides = var.container_image_overrides
+  container_image_overrides = local.container_image_overrides
 
   catalog_db_endpoint = module.dependencies.catalog_db_endpoint
   catalog_db_port     = module.dependencies.catalog_db_port
