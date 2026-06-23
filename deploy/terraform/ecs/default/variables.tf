@@ -18,6 +18,7 @@ variable "aws_region" {
 }
 
 variable "tags" {
-  description = "List of tags to be associated with resources."
-  default     = {}
+  type = string
+  description = "Tag to be associated with resources"
+  default     = "0.1.1"
 }
