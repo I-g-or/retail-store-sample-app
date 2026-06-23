@@ -1,6 +1,10 @@
 name: Deploy to ECS EC2
 
 on:
+  push:
+    branches:   
+      - 'feature/terraform-for-ecs-ec2' 
+
   workflow_dispatch:
 
 jobs:
