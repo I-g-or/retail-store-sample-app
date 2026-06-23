@@ -28,6 +28,7 @@ module "dependencies" {
 }
 
 locals {
+  user_overrides            = var.container_image_overrides
   container_image_overrides = {
     default_repository = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com"
     default_tag        = var.image_tag
