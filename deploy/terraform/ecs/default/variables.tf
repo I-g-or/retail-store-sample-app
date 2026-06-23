@@ -17,7 +17,7 @@ variable "aws_region" {
   type = string
 }
 
-variable "tags" {
-  description = "List of tags to be associated with resources."
-  default     = {}
+variable "image_tag" {
+  type = string
+  default     = "0.1.1"
 }
