@@ -21,12 +21,18 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: Download Plan Artifact
+      - name: Download terraform State
         uses: actions/download-artifact@v4
         with:
-          name: tf-plan
+          name: terraform-state
           path: deploy/terraform/ecs/default
 
       - name: Terraform destroy
         working-directory: deploy/terraform/ecs/default
-        run: terraform destroy -auto-approve plan.tfplan
+        run: |
+          terraform init  -migrate-state
+          terraform destroy -auto-approve \
+            -var="environment_name=dev" \
+            -var="image_tag=0.1.1" \
+            -var="aws_account_id=${{ secrets.AWS_ACCOUNT_ID }}" \
+            -var="aws_region=${{ secrets.AWS_REGION }}" 
