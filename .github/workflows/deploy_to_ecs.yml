@@ -114,3 +114,10 @@ jobs:
       - name: Terraform Apply
         working-directory: deploy/terraform/ecs/default
         run: terraform apply plan.tfplan
+    
+      - name: Upload Terraform State
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-state
+          path: deploy/terraform/ecs/default/terraform.tfstate*
+          retention-days: 3
