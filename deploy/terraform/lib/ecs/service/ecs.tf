@@ -10,48 +10,54 @@ locals {
   }])
 }
 
-data "aws_region" "current" {}
+locals {
+  aws_region = data.aws_region.current.name
+}
 
 resource "aws_ecs_task_definition" "this" {
   family                   = "${var.environment_name}-${var.service_name}"
-  container_definitions    = <<DEFINITION
-    [{
-      "name": "application",
-      "image": "${var.container_image}",
-      "portMappings": [
+  container_definitions = jsonencode([
+    {
+      name      = "application"
+      image     = var.container_image
+      cpu       = 0
+      essential = true
+
+      portMappings = [
         {
-          "containerPort": 8080,
-          "hostPort": 8080,
-          "name": "application",
-          "protocol": "tcp"
+          containerPort = 8080
+          hostPort      = 8080
+          name          = "application"
+          protocol      = "tcp"
         }
-      ],
-      "essential": true,
-      "networkMode": "awsvpc",
-      "readonlyRootFilesystem": false,
-      "environment": ${local.environment},
-      "secrets": ${local.secrets},
-      "cpu": 0,
-      "mountPoints": [],
-      "volumesFrom": [],
-      "healthCheck": {
-        "command": [ "CMD-SHELL", "curl -f http://localhost:8080${var.healthcheck_path} || exit 1" ],
-        "interval": 10,
-        "startPeriod": 60,
-        "retries": 3,
-        "timeout": 5
-      },
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-group": "${var.cloudwatch_logs_group_id}",
-          "awslogs-region": "${data.aws_region.current.name}",
-          "awslogs-stream-prefix": "${var.service_name}-service"
+      ]
+
+      environment = local.environment
+      secrets     = local.secrets
+
+      healthCheck = {
+        command     = ["CMD-SHELL", "curl -f http://localhost:8080${var.healthcheck_path} || exit 1"]
+        interval    = 10
+        startPeriod = 60
+        retries     = 3
+        timeout     = 5
+      }
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = var.cloudwatch_logs_group_id
+          "awslogs-region"        = local.aws_region
+          "awslogs-stream-prefix" = "${var.service_name}-service"
         }
       }
+
+      mountPoints = []
+      volumesFrom = []
+      readonlyRootFilesystem = false
     }
-  ]
-  DEFINITION
+  ])
+
   requires_compatibilities = ["EC2"]    #["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = "1024"

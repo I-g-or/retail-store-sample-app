@@ -51,6 +51,7 @@ module "retail_app_ecs" {
   public_subnet_ids         = module.vpc.inner.public_subnets
   tags                      = module.tags.result
   container_image_overrides = local.container_image_overrides
+  aws_region                = var.aws_region
 
   catalog_db_endpoint = module.dependencies.catalog_db_endpoint
   catalog_db_port     = module.dependencies.catalog_db_port

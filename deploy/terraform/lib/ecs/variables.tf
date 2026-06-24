@@ -19,6 +19,11 @@ variable "asg_desired_capacity" {
   default = "2" 
 }
 
+variable "aws_region" {
+  type = string
+}
+
+
 
 variable "environment_name" {
   type = string
