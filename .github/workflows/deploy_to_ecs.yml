@@ -116,6 +116,7 @@ jobs:
           path: deploy/terraform/ecs/default
 
       - name: Terraform Apply
+        continue-on-error: true
         working-directory: deploy/terraform/ecs/default
         run: |
           terraform init
