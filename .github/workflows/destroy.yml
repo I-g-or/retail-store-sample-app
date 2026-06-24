@@ -28,7 +28,7 @@ jobs:
       - name: Download terraform State
         uses: actions/download-artifact@v4
         with:
-          name: terraform-state
+          name: terraform-state.zip
           path: deploy/terraform/ecs/default
 
       - name: Terraform destroy
