@@ -117,7 +117,9 @@ jobs:
 
       - name: Terraform Apply
         working-directory: deploy/terraform/ecs/default
-        run: terraform apply plan.tfplan
+        run: |
+          terraform init
+          terraform apply plan.tfplan
     
       - name: Upload Terraform State
         uses: actions/upload-artifact@v4
