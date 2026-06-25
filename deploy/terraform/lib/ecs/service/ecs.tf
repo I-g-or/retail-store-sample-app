@@ -1,13 +1,13 @@
 locals {
-  environment = jsonencode([for k, v in var.environment_variables : {
-    "name" : k,
-    "value" : v
-  }])
+  environment = [for k, v in var.environment_variables : {
+    name  = k
+    value = v
+  }]
 
-  secrets = jsonencode([for k, v in var.secrets : {
-    "name" : k,
-    "valueFrom" : v
-  }])
+  secrets = [for k, v in var.secrets : {
+    name       = k
+    valueFrom  = v
+  }]
 }
 
 data "aws_region" "current" {}

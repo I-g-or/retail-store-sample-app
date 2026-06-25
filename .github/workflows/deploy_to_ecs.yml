@@ -123,11 +123,9 @@ jobs:
           terraform init
           terraform apply plan.tfplan
 
-      - name: Show State
-        if: steps.terraform_apply.outcome == 'failure'
-        run: terraform state list
-
-      - name: Terraform Destroy ( Auto cleanup on Apply failure)
+      - name: Terraform Destroy ( auto cleanup on Apply failure)
+        continue-on-error: true
+        working-directory: deploy/terraform/ecs/default
         if: steps.terraform_apply.outcome == 'failure'
         run: terraform destroy -auto-approve
 
