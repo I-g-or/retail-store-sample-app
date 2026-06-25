@@ -1,10 +1,11 @@
 module "checkout-elasticache-redis" {
   source  = "cloudposse/elasticache-redis/aws"
-  version = "0.52.0"
+  version = "2.1.0"
 
   name                       = "${var.environment_name}-checkout"
   vpc_id                     = var.vpc_id
   instance_type              = "cache.t3.micro"
+  family                     = "redis7"
   subnets                    = var.subnet_ids
   transit_encryption_enabled = false
   tags                       = var.tags

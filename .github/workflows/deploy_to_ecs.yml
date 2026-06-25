@@ -115,16 +115,26 @@ jobs:
           name: tf-plan
           path: deploy/terraform/ecs/default
 
-      - name: Terraform Apply
+      - name: Terraform apply
+        id: terraform_apply
         continue-on-error: true
         working-directory: deploy/terraform/ecs/default
         run: |
           terraform init
           terraform apply plan.tfplan
-    
-      - name: Upload Terraform State
+
+      - name: Show State
+        if: steps.terraform_apply.outcome == 'failure'
+        run: terraform state list
+
+      - name: Terraform Destroy ( Auto cleanup on Apply failure)
+        if: steps.terraform_apply.outcome == 'failure'
+        run: terraform destroy -auto-approve
+
+      - name: Upload Terraform State (on success)
+        if: steps.terraform_apply.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: terraform-state
-          path: deploy/terraform/ecs/default/terraform.tfstate*
-          retention-days: 3
+          path: deploy/terraform/ecs/default
+          retention-days: 3          
