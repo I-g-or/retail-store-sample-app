@@ -27,7 +27,7 @@ jobs:
       - name: Terraform fmt validate
         working-directory: deploy/terraform/ecs/default
         run: |
-          terraform init -input=false
+          terraform init -input=false -backend=false
           terraform fmt -check -recursive
           terraform validate 
 
@@ -51,11 +51,10 @@ jobs:
         working-directory: deploy/terraform/ecs/default
         run: tflint -f compact --recursive
 
-  tf-plan:
+  deploy:
     needs: 
       - tflint
       - fmt-validate
-
     runs-on: ubuntu-latest
 
     steps:
@@ -70,69 +69,28 @@ jobs:
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        working-directory: deploy/terraform/ecs/default
+        run: terraform init
 
       - name: Terraform plan
         working-directory: deploy/terraform/ecs/default
         run: |
-          terraform init
           terraform plan \
             -var="environment_name=dev" \
             -var="image_tag=0.1.1" \
             -var="aws_account_id=${{ secrets.AWS_ACCOUNT_ID }}" \
-            -var="aws_region=${{ secrets.AWS_REGION }}" \
-            -out=plan.tfplan
-
-      - name: Upload Plan Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: tf-plan
-          path: deploy/terraform/ecs/default/plan.tfplan
-          retention-days: 1
-
-
-  deploy:
-    needs: 
-      - tf-plan
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-
-      - name: Download Plan Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: tf-plan
-          path: deploy/terraform/ecs/default
+            -var="aws_region=${{ secrets.AWS_REGION }}"
 
       - name: Terraform apply
         id: terraform_apply
-        continue-on-error: true
         working-directory: deploy/terraform/ecs/default
         run: |
-          terraform init
-          terraform apply plan.tfplan
-
-      - name: Terraform Destroy ( auto cleanup on Apply failure)
-        continue-on-error: true
-        working-directory: deploy/terraform/ecs/default
-        if: steps.terraform_apply.outcome == 'failure'
-        run: terraform destroy -auto-approve
-
-      - name: Upload Terraform State (on success)
-        if: steps.terraform_apply.outcome == 'success'
-        uses: actions/upload-artifact@v4
-        with:
-          name: terraform-state
-          path: deploy/terraform/ecs/default
-          retention-days: 3          
+          terraform apply \
+            -auto-approve \
+            -var="environment_name=dev" \
+            -var="image_tag=0.1.1" \
+            -var="aws_account_id=${{ secrets.AWS_ACCOUNT_ID }}" \
+            -var="aws_region=${{ secrets.AWS_REGION }}"
+ 
