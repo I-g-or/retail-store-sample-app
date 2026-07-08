@@ -21,6 +21,8 @@ resource "aws_mq_broker" "mq" {
   apply_immediately   = true
   publicly_accessible = false
 
+  auto_minor_version_upgrade = true
+
   user {
     username = local.mq_default_user
     password = random_password.mq_password.result
