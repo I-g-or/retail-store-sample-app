@@ -62,8 +62,8 @@ resource "aws_ecs_task_definition" "this" {
 
   requires_compatibilities = ["EC2"]    #["FARGATE"]
   network_mode             = "awsvpc"
-  cpu                      = "1024"
-  memory                   = "2048"
+  cpu                      = "256"
+  memory                   = "512"
   execution_role_arn       = aws_iam_role.task_execution_role.arn
   task_role_arn            = aws_iam_role.task_role.arn
 }
