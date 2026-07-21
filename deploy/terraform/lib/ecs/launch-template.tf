@@ -17,6 +17,41 @@ resource "aws_launch_template" "ecs_ec2" {
 echo "ECS_CLUSTER=${aws_ecs_cluster.cluster.name}" >> /etc/ecs/ecs.config
 echo "ECS_ENABLE_CONTAINER_METADATA=true" >> /etc/ecs/ecs.config
 echo "ECS_LOGLEVEL=info" >> /etc/ecs/ecs.config
+
+sudo mkdir -p /etc/prometheus
+sudo mkdir -p /etc/alertmanager
+sudo mkdir -p /etc/blackbox
+
+sudo aws ssm get-parameter \
+    --name "/${var.environment_name}/monitoring/prometheus.yml" \
+    --with-decryption \
+    --query Parameter.Value \
+    --output text \
+    > /etc/prometheus/prometheus.yml
+
+sudo chmod 644 /etc/prometheus/*.yml
+sudo chown root:root /etc/prometheus/*.yml
+
+sudo aws ssm get-parameter \
+    --name "/${var.environment_name}/monitoring/alertmanager.yml" \
+    --with-decryption \
+    --query Parameter.Value \
+    --output text \
+    > /etc/alertmanager/alertmanager.yml
+
+sudo chmod 644 /etc/alertmanager/*.yml
+sudo chown root:root /etc/alertmanager/*.yml
+
+sudo aws ssm get-parameter \
+  --name "/${var.environment_name}/monitoring/blackbox.yml" \
+  --with-decryption \
+  --query Parameter.Value \
+  --output text \
+  > /etc/blackbox/blackbox.yml
+
+sudo chmod 644 /etc/blackbox/*.yml
+sudo chown root:root /etc/blackbox/*.yml
+
 echo "ECS user data script completed at $(date)" >> /var/log/ecs-init.log
 EOF
 )

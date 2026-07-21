@@ -75,3 +75,18 @@ module "retail_app_ecs" {
   mq_username = module.dependencies.mq_user
   mq_password = module.dependencies.mq_password
 }
+
+module "monitoring" {
+  source = "../../lib/monitoring"
+
+  environment_name                = var.environment_name
+  aws_region                      = var.aws_region
+  cluster_arn                     = aws_ecs_cluster.cluster.arn
+  vpc_id                          = module.vpc.inner.vpc_id
+  vpc_cidr                        = module.vpc.inner.vpc_cidr_block
+  subnet_ids                      = module.vpc.inner.private_subnets
+  tags                            = module.tags.result
+  service_discovery_namespace_arn = aws_service_discovery_private_dns_namespace.this.arn
+  capacity_provider_name          = aws_ecs_capacity_provider.ec2.name
+  cloudwatch_logs_group_id        = aws_cloudwatch_log_group.ecs_tasks.id
+}
