@@ -13,13 +13,15 @@ resource "aws_mq_broker" "mq" {
   broker_name = "${var.environment_name}-orders-broker"
 
   engine_type         = "RabbitMQ"
-  engine_version      = "3.10.10"
-  host_instance_type  = "mq.t3.micro"
+  engine_version      = "4.2"
+  host_instance_type  = "mq.m7g.medium"
   deployment_mode     = "SINGLE_INSTANCE"
   subnet_ids          = [var.subnet_ids[0]]
   security_groups     = [aws_security_group.mq.id]
   apply_immediately   = true
   publicly_accessible = false
+
+  auto_minor_version_upgrade = true
 
   user {
     username = local.mq_default_user

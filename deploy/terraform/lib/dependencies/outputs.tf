@@ -98,7 +98,7 @@ output "mq_broker_arn" {
 }
 
 output "mq_broker_endpoint" {
-  value       = aws_mq_broker.mq.instances[0].endpoints[0]
+  value       = aws_mq_broker.mq.instances[0].endpoints[1]
   description = "AmazonMQ broker endpoint"
 }
 

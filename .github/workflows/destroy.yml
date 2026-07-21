@@ -25,11 +25,9 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: Download terraform State
-        uses: actions/download-artifact@v4
-        with:
-          name: terraform-state.zip
-          path: deploy/terraform/ecs/default
+      - name: Terraform Init
+        working-directory: deploy/terraform/ecs/default
+        run: terraform init
 
       - name: Terraform destroy
         working-directory: deploy/terraform/ecs/default
@@ -39,4 +37,4 @@ jobs:
             -var="environment_name=dev" \
             -var="image_tag=0.1.1" \
             -var="aws_account_id=${{ secrets.AWS_ACCOUNT_ID }}" \
-            -var="aws_region=${{ secrets.AWS_REGION }}" 
+            -var="aws_region=${{ secrets.AWS_REGION }}"
