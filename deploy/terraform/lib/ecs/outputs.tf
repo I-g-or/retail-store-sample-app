@@ -35,6 +35,10 @@ output "cloudwatch_logs_group_id" {
   value = aws_cloudwatch_log_group.ecs_tasks.id
 }
 
+output "task_role" {
+  value = aws_iam_role.task_role.name
+}
+
 output "task_execution_role" {
   value = aws_iam_role.task_execution_role.name
 }

@@ -83,6 +83,7 @@ module "monitoring" {
   aws_region                      = var.aws_region
   cluster_name                    = module.retail_app_ecs.cluster_name
   cluster_arn                     = module.retail_app_ecs.cluster_arn
+  task_role                       = module.retail_app_ecs.task_role
   task_execution_role             = module.retail_app_ecs.task_execution_role
   vpc_id                          = module.vpc.inner.vpc_id
   vpc_cidr                        = module.vpc.inner.vpc_cidr_block

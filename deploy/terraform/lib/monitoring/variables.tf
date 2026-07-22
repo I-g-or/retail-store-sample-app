@@ -47,6 +47,10 @@ variable "vpc_cidr" {
   type = string
 }
 
+variable "task_role" {
+  type = string
+}
+
 variable "task_execution_role" {
   type = string
 }
