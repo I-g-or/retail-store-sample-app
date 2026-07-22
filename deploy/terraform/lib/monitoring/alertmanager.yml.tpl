@@ -11,8 +11,8 @@ route:
 receivers:
   - name: 'aws-sns-receiver'
     sns_configs:
-      - topic_arn: "arn:aws:sns:REGION:ACCOUNT:your-alert-topic"
-        region: ${var.aws_region}      
+      - topic_arn: ${TOPIC_ARN}
+        region: ${AWS_REGION}      
         subject: "Alert in Retail store: {{ .GroupLabels.alertname }} - {{ .Status }}"
         message: |
           {{ range .Alerts }}

@@ -197,6 +197,7 @@ resource "aws_ssm_parameter" "alertmanager_config" {
       AWS_REGION       = var.aws_region
       ENVIRONMENT      = var.environment_name
       ECS_CLUSTER_NAME = var.cluster_name
+      TOPIC_ARN        = aws_sns_topic.monitoring_alerts.arn
     }
   )
 
