@@ -180,7 +180,7 @@ resource "aws_ssm_parameter" "prometheus_config" {
     {
       AWS_REGION       = var.aws_region
       ENVIRONMENT      = var.environment_name
-      ECS_CLUSTER_NAME = aws_ecs_cluster.main.cluster_name
+      ECS_CLUSTER_NAME = var.cluster_name
     }
   )
 
@@ -196,7 +196,7 @@ resource "aws_ssm_parameter" "alertmanager_config" {
     {
       AWS_REGION       = var.aws_region
       ENVIRONMENT      = var.environment_name
-      ECS_CLUSTER_NAME = aws_ecs_cluster.main.cluster_name
+      ECS_CLUSTER_NAME = var.cluster_name
     }
   )
 
@@ -212,7 +212,7 @@ resource "aws_ssm_parameter" "blackbox_config" {
     {
       AWS_REGION       = var.aws_region
       ENVIRONMENT      = var.environment_name
-      ECS_CLUSTER_NAME = aws_ecs_cluster.main.cluster_name
+      ECS_CLUSTER_NAME = var.cluster_name
     }
   )
 

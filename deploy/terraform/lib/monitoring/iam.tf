@@ -34,7 +34,7 @@ resource "aws_iam_policy" "prometheus_ecs_discovery" {
 }
 
 resource "aws_iam_role_policy_attachment" "task_role_prometheus" {
-  role       = aws_iam_role.task_role.name
+  role       = var.task_execution_role
   policy_arn = aws_iam_policy.prometheus_ecs_discovery.arn
 }
 
@@ -58,6 +58,6 @@ resource "aws_iam_policy" "alertmanager_sns" {
 }
 
 resource "aws_iam_role_policy_attachment" "task_role_alertmanager" {
-  role       = aws_iam_role.task_role.name
+  role       = var.task_execution_role
   policy_arn = aws_iam_policy.alertmanager_sns.arn
 }

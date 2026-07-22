@@ -21,6 +21,11 @@ variable "subnet_ids" {
   type        = list(string)
 }
 
+variable "cluster_name" {
+  type        = string
+  description = "Name ECS cluster"
+}
+
 variable "cluster_arn" {
   type        = string
   description = "ARN ECS cluster"
@@ -39,5 +44,9 @@ variable "capacity_provider_name" {
 }
 
 variable "vpc_cidr" {
+  type = string
+}
+
+variable "task_execution_role" {
   type = string
 }

@@ -81,12 +81,14 @@ module "monitoring" {
 
   environment_name                = var.environment_name
   aws_region                      = var.aws_region
-  cluster_arn                     = aws_ecs_cluster.cluster.arn
+  cluster_name                    = module.retail_app_ecs.cluster_name
+  cluster_arn                     = module.retail_app_ecs.cluster_arn
+  task_execution_role             = module.retail_app_ecs.task_execution_role
   vpc_id                          = module.vpc.inner.vpc_id
   vpc_cidr                        = module.vpc.inner.vpc_cidr_block
   subnet_ids                      = module.vpc.inner.private_subnets
   tags                            = module.tags.result
-  service_discovery_namespace_arn = aws_service_discovery_private_dns_namespace.this.arn
-  capacity_provider_name          = aws_ecs_capacity_provider.ec2.name
-  cloudwatch_logs_group_id        = aws_cloudwatch_log_group.ecs_tasks.id
+  service_discovery_namespace_arn = module.retail_app_ecs.service_discovery_namespace_arn
+  capacity_provider_name          = module.retail_app_ecs.capacity_provider_name
+  cloudwatch_logs_group_id        = module.retail_app_ecs.cloudwatch_logs_group_id
 }

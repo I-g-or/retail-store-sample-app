@@ -14,3 +14,27 @@ output "checkout_security_group_id" {
 output "orders_security_group_id" {
   value = module.orders_service.task_security_group_id
 }
+
+output "cluster_arn" {
+  value = aws_ecs_cluster.cluster.arn
+}
+
+output "cluster_name" {
+  value = aws_ecs_cluster.cluster.name
+}
+
+output "service_discovery_namespace_arn" {
+  value = aws_service_discovery_private_dns_namespace.this.arn
+}
+
+output "capacity_provider_name" {
+  value = aws_ecs_capacity_provider.ec2.name
+}
+
+output "cloudwatch_logs_group_id" {
+  value = aws_cloudwatch_log_group.ecs_tasks.id
+}
+
+output "task_execution_role" {
+  value = aws_iam_role.task_execution_role.name
+}
