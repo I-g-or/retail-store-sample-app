@@ -37,6 +37,7 @@ sudo aws ssm get-parameter \
     --with-decryption \
     --query Parameter.Value \
     --output text \
+    | base64 -d \
     > /etc/alertmanager/alertmanager.yml
 
 sudo chmod 644 /etc/alertmanager/*.yml
