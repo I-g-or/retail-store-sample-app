@@ -17,7 +17,7 @@ scrape_configs:
     aws_sd_configs:
       - region: ${AWS_REGION}
         role: ecs
-        clusters: ${ECS_CLUSTER_NAME}
+        clusters: ["${ECS_CLUSTER_NAME}"]
        
 
     relabel_configs:
