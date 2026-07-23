@@ -5,7 +5,7 @@ resource "aws_ecs_task_definition" "monitoring" {
   memory                   = "2048"
   network_mode             = "awsvpc"
   execution_role_arn       = var.task_execution_role
-  task_role_arn            = var.task_role
+  task_role_arn            = var.task_role_arn
 
   container_definitions = jsonencode([
     {
