@@ -191,6 +191,8 @@ resource "aws_ssm_parameter" "alertmanager_config" {
   name  = "/${var.environment_name}/monitoring/alertmanager.yml"
   type  = "String"
 
+  data_type = "text"
+
   value = templatefile(
     "${path.module}/../monitoring/alertmanager.yml.tpl",
     {
