@@ -75,7 +75,7 @@ resource "aws_ecs_task_definition" "monitoring" {
         containerPort = 9115
         hostPort      = 9115
         protocol      = "tcp"
-        name          = "blackbox"
+        name          = "blackbox-exporter"
       }]
 
       mountPoints = [{
