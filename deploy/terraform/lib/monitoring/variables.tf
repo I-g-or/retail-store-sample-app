@@ -57,3 +57,11 @@ variable "task_role_arn" {
 variable "task_execution_role" {
   type = string
 }
+
+variable "target_group_prometheus_arn" {
+  type = string
+}
+
+variable "target_group_alertmanager_arn" {
+  type = string
+}

@@ -89,6 +89,8 @@ module "monitoring" {
   vpc_id                          = module.vpc.inner.vpc_id
   vpc_cidr                        = module.vpc.inner.vpc_cidr_block
   subnet_ids                      = module.vpc.inner.private_subnets
+  target_group_prometheus_arn     = module.retail_app_ecs.target_group_prometheus_arn
+  target_group_alertmanager_arn   = module.retail_app_ecs.target_group_alertmanager_arn
   tags                            = module.tags.result
   service_discovery_namespace_arn = module.retail_app_ecs.service_discovery_namespace_arn
   capacity_provider_name          = module.retail_app_ecs.capacity_provider_name

@@ -33,6 +33,31 @@ module "alb" {
     }
   ]
 
+  http_tcp_listener_rules = [
+    # Prometheus
+    {
+      listener_index = 0
+      actions = [{
+        type             = "forward"
+        target_group_arn = module.alb.target_group_arns[1]
+      }]
+      conditions = [{
+        path_pattern = { values = ["/prometheus*", "/prometheus"] }
+      }]
+    },
+    # Alertmanager
+    {
+      listener_index = 0
+      actions = [{
+        type             = "forward"
+        target_group_arn = module.alb.target_group_arns[2]
+      }]
+      conditions = [{
+        path_pattern = { values = ["/alertmanager*", "/alertmanager"] }
+      }]
+    }
+  ]
+
   target_groups = [
     {
       name                 = "ui-application"
@@ -49,6 +74,36 @@ module "alb" {
         unhealthy_threshold = 3
         timeout             = 5
         protocol            = "HTTP"
+      }
+    },
+    {
+      name                 = "${var.environment_name}-prometheus"
+      backend_protocol     = "HTTP"
+      backend_port         = 9090
+      target_type          = "ip"
+      deregistration_delay = 30
+      health_check = {
+        enabled             = true
+        interval            = 30
+        path                = "/-/healthy"
+        healthy_threshold   = 2
+        unhealthy_threshold = 5
+        timeout             = 5
+      }
+    },
+    {
+      name                 = "${var.environment_name}-alertmanager"
+      backend_protocol     = "HTTP"
+      backend_port         = 9093
+      target_type          = "ip"
+      deregistration_delay = 30
+      health_check = {
+        enabled             = true
+        interval            = 30
+        path                = "/-/healthy"
+        healthy_threshold   = 2
+        unhealthy_threshold = 5
+        timeout             = 5
       }
     }
   ]

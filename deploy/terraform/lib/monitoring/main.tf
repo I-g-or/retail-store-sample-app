@@ -138,6 +138,18 @@ resource "aws_ecs_service" "monitoring" {
     assign_public_ip = false
   }
 
+  load_balancer {
+    target_group_arn = var.target_group_prometheus_arn
+    container_name   = "prometheus"
+    container_port   = 9090
+  }
+
+  load_balancer {
+    target_group_arn = var.target_group_alertmanager_arn
+    container_name   = "alertmanager"
+    container_port   = 9093
+}
+
   service_connect_configuration {
     enabled   = true
     namespace = var.service_discovery_namespace_arn

@@ -46,3 +46,11 @@ output "task_role_arn" {
 output "task_execution_role" {
   value = aws_iam_role.task_execution_role.arn
 }
+
+output "target_group_prometheus_arn" {
+  value = module.alb.http_tcp_listener_arns[1]
+}
+
+output "target_group_alertmanager_arn" {
+  value = module.alb.target_group_arns[2]
+}
