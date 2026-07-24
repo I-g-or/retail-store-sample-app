@@ -36,8 +36,8 @@ module "alb" {
   http_tcp_listener_rules = [
     # Prometheus
     {
-      listener_index = 0
-      priority       = 100
+      http_tcp_listener_index = 0
+      priority                = 100
       actions = [{
         type             = "forward"
         target_group_arn = module.alb.target_group_arns[1]
@@ -48,8 +48,8 @@ module "alb" {
     },
     # Alertmanager
     {
-      listener_index = 0
-      priority       = 110
+      http_tcp_listener_index = 0
+      priority                = 110
       actions = [{
         type             = "forward"
         target_group_arn = module.alb.target_group_arns[2]
@@ -79,7 +79,7 @@ module "alb" {
       }
     },
     {
-      name                 = "${var.environment_name}-prometheus"
+      name                 = "prometheus"
       backend_protocol     = "HTTP"
       backend_port         = 9090
       target_type          = "ip"
@@ -94,7 +94,7 @@ module "alb" {
       }
     },
     {
-      name                 = "${var.environment_name}-alertmanager"
+      name                 = "alertmanager"
       backend_protocol     = "HTTP"
       backend_port         = 9093
       target_type          = "ip"
