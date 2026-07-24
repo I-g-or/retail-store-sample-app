@@ -37,6 +37,7 @@ module "alb" {
     # Prometheus
     {
       listener_index = 0
+      priority       = 100
       actions = [{
         type             = "forward"
         target_group_arn = module.alb.target_group_arns[1]
@@ -48,6 +49,7 @@ module "alb" {
     # Alertmanager
     {
       listener_index = 0
+      priority       = 110
       actions = [{
         type             = "forward"
         target_group_arn = module.alb.target_group_arns[2]
