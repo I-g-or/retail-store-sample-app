@@ -43,7 +43,12 @@ module "alb" {
         target_group_arn = module.alb.target_group_arns[1]
       }]
       conditions = [{
-        path_pattern = { values = ["/prometheus*", "/prometheus"] }
+          path_pattern = {
+            values = [
+              "/prometheus",
+              "/prometheus/*"
+            ]
+          }
       }]
     },
     # Alertmanager
@@ -55,7 +60,12 @@ module "alb" {
         target_group_arn = module.alb.target_group_arns[2]
       }]
       conditions = [{
-        path_pattern = { values = ["/alertmanager*", "/alertmanager"] }
+          path_pattern = {
+            values = [
+              "/alertmanager",
+              "/alertmanager/*"
+            ]
+          }
       }]
     }
   ]
