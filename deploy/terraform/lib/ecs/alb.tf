@@ -40,7 +40,7 @@ module "alb" {
       priority                = 100
       actions = [{
         type             = "forward"
-        target_group_arn = 1
+        target_group_index = 1
       }]
       conditions = [{
         path_patterns = ["/prometheus", "/prometheus/*"]
@@ -52,7 +52,7 @@ module "alb" {
       priority                = 110
       actions = [{
         type             = "forward"
-        target_group_arn = 2
+        target_group_index = 2
       }]
       conditions = [{
         path_patterns = ["/alertmanager", "/alertmanager/*"]
