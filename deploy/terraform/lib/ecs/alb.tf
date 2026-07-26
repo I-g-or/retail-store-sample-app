@@ -15,7 +15,7 @@ module "alb_sg" {
 
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
-  version = "~> 8.0"
+  version = "8.7"
 
   name = "${var.environment_name}-ui"
 
@@ -40,15 +40,10 @@ module "alb" {
       priority                = 100
       actions = [{
         type             = "forward"
-        target_group_arn = module.alb.target_group_arns[1]
+        target_group_arn = 1
       }]
       conditions = [{
-          path_pattern = {
-            values = [
-              "/prometheus",
-              "/prometheus/*"
-            ]
-          }
+        path_patterns = ["/prometheus", "/prometheus/*"]
       }]
     },
     # Alertmanager
@@ -57,15 +52,10 @@ module "alb" {
       priority                = 110
       actions = [{
         type             = "forward"
-        target_group_arn = module.alb.target_group_arns[2]
+        target_group_arn = 2
       }]
       conditions = [{
-          path_pattern = {
-            values = [
-              "/alertmanager",
-              "/alertmanager/*"
-            ]
-          }
+        path_patterns = ["/alertmanager", "/alertmanager/*"]
       }]
     }
   ]
