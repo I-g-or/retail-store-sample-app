@@ -6,13 +6,14 @@ route:
   group_wait: 30s
   group_interval: 5m
   repeat_interval: 3h
-  receiver: 'sns'
+  receiver: 'aws-sns-receiver'
 
 receivers:
   - name: 'aws-sns-receiver'
     sns_configs:
       - topic_arn: ${TOPIC_ARN}
-        region: ${AWS_REGION}      
+        sigv4:
+          region: ${AWS_REGION}      
         subject: "Alert in Retail store: {{ .GroupLabels.alertname }} - {{ .Status }}"
         message: |
           {{ range .Alerts }}
