@@ -180,6 +180,8 @@ resource "aws_ecs_service" "monitoring" {
     }
   }
 
+  depends_on = [module.retail_app_ecs.alb]
+
   tags = var.tags
 }
 
