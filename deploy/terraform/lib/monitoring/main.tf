@@ -127,6 +127,8 @@ resource "aws_ecs_service" "monitoring" {
   task_definition = aws_ecs_task_definition.monitoring.arn
   desired_count   = 1
 
+  enable_execute_command = true
+  
   capacity_provider_strategy {
     capacity_provider = var.capacity_provider_name
     weight            = 100

@@ -25,7 +25,11 @@ resource "aws_iam_policy" "prometheus_ecs_discovery" {
           "ec2:DescribeInstances",
           "ec2:DescribeTags",
           "ssm:GetParameter",
-          "ssm:GetParameters"
+          "ssm:GetParameters",
+          "ssmmessages:CreateControlChannel",
+          "ssmmessages:CreateDataChannel",
+          "ssmmessages:OpenControlChannel",
+          "ssmmessages:OpenDataChannel"
         ]
         Resource = "*"
       }
