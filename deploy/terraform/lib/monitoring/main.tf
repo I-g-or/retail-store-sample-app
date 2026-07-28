@@ -26,7 +26,13 @@ resource "aws_ecs_task_definition" "monitoring" {
         readOnly      = true
       }]
 
-      command = ["--config.file=/etc/prometheus/prometheus.yml"]
+      command = [
+        "/bin/sh",
+        "-c",
+        "echo '===== prometheus config =====' && cat /etc/prometheus/prometheus.yml && echo '===== END =====' && sleep 1800"
+      ]
+
+      # command = ["--config.file=/etc/prometheus/prometheus.yml"]
 
       logConfiguration = {
         logDriver = "awslogs"
@@ -55,7 +61,13 @@ resource "aws_ecs_task_definition" "monitoring" {
         readOnly      = true
       }]
 
-      command = ["--config.file=/etc/alertmanager/alertmanager.yml"]
+      command = [
+        "/bin/sh",
+        "-c",
+        "echo '===== alertmanager config =====' && cat /etc/alertmanager/alertmanager.yml && echo '===== END =====' && sleep 1800"
+      ]
+
+      # command = ["--config.file=/etc/alertmanager/alertmanager.yml"]
 
       logConfiguration = {
         logDriver = "awslogs"
@@ -84,7 +96,13 @@ resource "aws_ecs_task_definition" "monitoring" {
         readOnly      = true
       }]
 
-      command = ["--config.file=/etc/blackbox_exporter/blackbox.yml"]
+      command = [
+        "/bin/sh",
+        "-c",
+        "echo '===== blackbox config =====' && cat /etc/blackbox_exporter/blackbox.yml && echo '===== END =====' && sleep 1800"
+      ]
+
+      # command = ["--config.file=/etc/blackbox_exporter/blackbox.yml"]
 
       logConfiguration = {
         logDriver = "awslogs"
@@ -128,7 +146,7 @@ resource "aws_ecs_service" "monitoring" {
   desired_count   = 1
 
   enable_execute_command = true
-  
+
   capacity_provider_strategy {
     capacity_provider = var.capacity_provider_name
     weight            = 100
