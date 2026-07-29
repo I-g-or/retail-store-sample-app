@@ -50,3 +50,7 @@ output "target_group_prometheus_arn" {
 output "target_group_alertmanager_arn" {
   value = module.alb.target_group_arns[2]
 }
+
+output "alertmanager_sns_arn" {
+  value = aws_sns_topic.monitoring_alerts.arn
+}

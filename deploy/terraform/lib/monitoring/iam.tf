@@ -63,5 +63,5 @@ resource "aws_iam_policy" "alertmanager_sns" {
 
 resource "aws_iam_role_policy_attachment" "task_role_alertmanager" {
   role       = var.task_role
-  policy_arn = aws_iam_policy.alertmanager_sns.arn
+  policy_arn = var.alertmanager_sns_arn
 }

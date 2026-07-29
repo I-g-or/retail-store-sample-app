@@ -60,3 +60,7 @@ variable "target_group_prometheus_arn" {
 variable "target_group_alertmanager_arn" {
   type = string
 }
+
+variable "alertmanager_sns_arn" {
+  type = string
+}

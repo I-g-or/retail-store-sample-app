@@ -94,6 +94,7 @@ module "monitoring" {
   service_discovery_namespace_arn = module.retail_app_ecs.service_discovery_namespace_arn
   capacity_provider_name          = module.retail_app_ecs.capacity_provider_name
   cloudwatch_logs_group_id        = module.retail_app_ecs.cloudwatch_logs_group_id
+  alertmanager_sns_arn            = module.retail_app_ecs.alertmanager_sns_arn
 
   depends_on = [module.retail_app_ecs]
 
