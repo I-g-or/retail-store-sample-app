@@ -81,7 +81,6 @@ module "monitoring" {
 
   environment_name                = var.environment_name
   aws_region                      = var.aws_region
-  cluster_name                    = module.retail_app_ecs.cluster_name
   cluster_arn                     = module.retail_app_ecs.cluster_arn
   task_role                       = module.retail_app_ecs.task_role
   task_role_arn                   = module.retail_app_ecs.task_role_arn
