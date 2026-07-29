@@ -51,6 +51,6 @@ output "target_group_alertmanager_arn" {
   value = module.alb.target_group_arns[2]
 }
 
-output "alertmanager_sns_arn" {
+output "sns_topic_arn" {
   value = aws_sns_topic.monitoring_alerts.arn
 }

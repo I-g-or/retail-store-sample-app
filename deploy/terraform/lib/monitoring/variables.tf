@@ -61,6 +61,6 @@ variable "target_group_alertmanager_arn" {
   type = string
 }
 
-variable "alertmanager_sns_arn" {
+variable "sns_topic_arn" {
   type = string
 }
