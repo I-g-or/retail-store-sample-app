@@ -27,7 +27,7 @@ sudo aws ssm get-parameter \
     --with-decryption \
     --query Parameter.Value \
     --output text \
-    | sudo tee /etc/prometheus/prometheus.yml
+    | base64 -d | sudo tee /etc/prometheus/prometheus.yml
 
 sudo chmod 644 /etc/prometheus/*.yml
 sudo chown root:root /etc/prometheus/*.yml
@@ -37,7 +37,7 @@ sudo aws ssm get-parameter \
     --with-decryption \
     --query Parameter.Value \
     --output text \
-    | sudo tee /etc/alertmanager/alertmanager.yml
+    | base64 -d | sudo tee /etc/alertmanager/alertmanager.yml
 
 sudo chmod 644 /etc/alertmanager/*.yml
 sudo chown root:root /etc/alertmanager/*.yml
