@@ -68,6 +68,12 @@ EOF
     }
   }
 
+  depends_on = [
+    aws_ssm_parameter.prometheus_config, 
+    aws_ssm_parameter.alertmanager_config,
+    aws_ssm_parameter.blackbox_config
+    ]
+
   tags = merge(var.tags, { Name = "${var.environment_name}-ecs-launch-template" })
 }
 
