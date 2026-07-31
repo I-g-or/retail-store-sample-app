@@ -55,7 +55,10 @@ resource "aws_ecs_task_definition" "monitoring" {
         readOnly      = true
       }]
 
-      command = ["--config.file=/etc/alertmanager/alertmanager.yml"]
+      command = [
+        "--config.file=/etc/alertmanager/alertmanager.yml",
+        "--web.route-prefix=/alertmanager"
+      ]
 
       logConfiguration = {
         logDriver = "awslogs"

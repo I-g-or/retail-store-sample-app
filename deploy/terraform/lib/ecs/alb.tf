@@ -87,7 +87,7 @@ module "alb" {
       health_check = {
         enabled             = true
         interval            = 30
-        path                = "/-/healthy"
+        path                = "/alertmanager/-/healthy"
         healthy_threshold   = 2
         unhealthy_threshold = 5
         timeout             = 5
