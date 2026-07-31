@@ -18,23 +18,22 @@ scrape_configs:
       - region: ${AWS_REGION}
         role: ecs
         clusters: ["${ECS_CLUSTER_NAME}"]
+        port: 8080
        
 
     relabel_configs:
       # Scrape only application services
-      - source_labels: [__meta_ecs_service_name]
+      - source_labels: [__meta_ecs_service]
         regex: "(ui|orders|catalog|checkout|assets|carts)"
         action: keep
 
       # User labels
-      - source_labels: [__meta_ecs_service_name]
+      - source_labels: [__meta_ecs_service]
         target_label: service
-      - source_labels: [__meta_ecs_cluster_name]
+      - source_labels: [__meta_ecs_cluster]
         target_label: cluster
-      - source_labels: [__meta_ecs_container_name]
+      - source_labels: [__meta_ecs_task_definition]
         target_label: container
-      - source_labels: [__meta_ecs_task_definition_family]
-        target_label: task_family
       - source_labels: [__meta_ecs_launch_type]
         target_label: launch_type
       - source_labels: [__meta_ecs_availability_zone]
