@@ -9,7 +9,7 @@ resource "aws_ssm_parameter" "prometheus_config" {
       {
         AWS_REGION       = var.aws_region
         ENVIRONMENT      = var.environment_name
-        ECS_CLUSTER_NAME = aws_ecs_cluster.cluster.name
+        ECS_CLUSTER_ARN = aws_ecs_cluster.cluster.arn
       }
     )
   )

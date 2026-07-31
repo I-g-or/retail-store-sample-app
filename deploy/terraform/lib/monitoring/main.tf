@@ -10,7 +10,7 @@ resource "aws_ecs_task_definition" "monitoring" {
   container_definitions = jsonencode([
     {
       name      = "prometheus"
-      image     = "prom/prometheus:latest"
+      image     = "prom/prometheus:v3.12.0"
       essential = true
 
       portMappings = [{
