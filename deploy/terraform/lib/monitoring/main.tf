@@ -26,7 +26,10 @@ resource "aws_ecs_task_definition" "monitoring" {
         readOnly      = true
       }]
 
-      command = ["--config.file=/etc/prometheus/prometheus.yml"]
+      command = [
+        "--config.file=/etc/prometheus/prometheus.yml",
+        "--web.enable-lifecycle"
+      ]
 
       logConfiguration = {
         logDriver = "awslogs"

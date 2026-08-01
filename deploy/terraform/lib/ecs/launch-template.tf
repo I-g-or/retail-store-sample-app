@@ -77,6 +77,7 @@ EOF
 
   depends_on = [
     aws_ssm_parameter.prometheus_config, 
+    aws_ssm_parameter.ecs_alerts,
     aws_ssm_parameter.alertmanager_config,
     aws_ssm_parameter.blackbox_config
     ]
