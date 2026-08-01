@@ -10,9 +10,9 @@ groups:
         annotations:
           summary: "ECS service {{ $labels.service }} unreachable"
           description: |
-          Target {{ $labels.instance }} (service {{ $labels.service }})
-          in cluster {{ $labels.cluster }} has been unreachable for more than 1 min.
-          Environment: {{ $labels.environment }}
+            Target {{ $labels.instance }} (service {{ $labels.service }})
+            in cluster {{ $labels.cluster }} has been unreachable for more than 1 min.
+            Environment: {{ $labels.environment }}
 
       - alert: ECSServiceUnhealthy
         expr: probe_success{job="blackbox"} == 0
