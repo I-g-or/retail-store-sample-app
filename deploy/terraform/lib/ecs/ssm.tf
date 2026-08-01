@@ -17,6 +17,24 @@ resource "aws_ssm_parameter" "prometheus_config" {
   tags = var.tags
 }
 
+resource "aws_ssm_parameter" "ecs_alerts" {
+  name  = "/${var.environment_name}/monitoring/ecs-alerts.yml"
+  type  = "String"
+
+  value = base64encode(
+    templatefile(
+      "${path.module}/../monitoring/ecs-alerts.yml.tpl",
+      {
+        AWS_REGION       = var.aws_region
+        ENVIRONMENT      = var.environment_name
+        ECS_CLUSTER_ARN = aws_ecs_cluster.cluster.arn
+      }
+    )
+  )
+
+  tags = var.tags
+}
+
 resource "aws_ssm_parameter" "alertmanager_config" {
   name  = "/${var.environment_name}/monitoring/alertmanager.yml"
   type  = "String"

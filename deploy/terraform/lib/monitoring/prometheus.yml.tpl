@@ -7,6 +7,9 @@ alerting:
     - static_configs:
         - targets: ['alertmanager:9093']
 
+rule_files:
+  - "ecs-alerts.yml"
+
 scrape_configs:
   - job_name: ecs-services
 

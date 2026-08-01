@@ -29,6 +29,13 @@ sudo aws ssm get-parameter \
     --output text \
     | base64 -d | sudo tee /etc/prometheus/prometheus.yml
 
+sudo aws ssm get-parameter \
+    --name "/dev/monitoring/ecs-alerts.yml" \
+    --with-decryption \
+    --query Parameter.Value \
+    --output text \
+    | base64 -d | sudo tee /etc/prometheus/ecs-alerts.yml
+
 sudo chmod 644 /etc/prometheus/*.yml
 sudo chown root:root /etc/prometheus/*.yml
 
