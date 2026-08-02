@@ -59,11 +59,12 @@ scrape_configs:
       module: [http_2xx]
     static_configs:
       - targets:
-          - 'ui:8080'
-          - 'catalog:8080'
-          - 'cart:8080'
-          - 'checkout:8080'
-          - 'orders:8080'
+        - 'http://ui:80/actuator/health'
+        - 'http://carts:80/actuator/health'
+        - 'http://orders:80/actuator/health'
+        - 'http://catalog:80/health'
+        - 'http://checkout:80/health'
+        - 'http://assets:80/health.html'
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
